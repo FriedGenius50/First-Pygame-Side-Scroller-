@@ -111,11 +111,19 @@ def main():
         pygame.display.update()
         timer.tick(60)
 
-class Entity(pygame.sprite.Sprite):
+class EntityDiff(pygame.sprite.Sprite):
     def __init__(self, color, pos, *groups):
         super().__init__(*groups)
         self.image = Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(color)
+        self.rect = self.image.get_rect(topleft=pos)
+        
+class Entity(pygame.sprite.Sprite):
+    def __init__(self, color, pos, *groups):
+        super().__init__(*groups)
+        '''self.image = Surface((TILE_SIZE, TILE_SIZE))
+        self.image.fill(color)'''
+        self.image = pygame.image.load('L1E.PNG')
         self.rect = self.image.get_rect(topleft=pos)
 
 class Player(Entity):
@@ -125,7 +133,7 @@ class Player(Entity):
         self.onGround = False
         self.platforms = platforms
         self.speed = 8
-        self.jump_strength = 10
+        self.jump_strength = 15
 
     def update(self):
         pressed = pygame.key.get_pressed()
@@ -170,7 +178,7 @@ class Player(Entity):
                 if yvel < 0:
                     self.rect.top = p.rect.bottom
 
-class Platform(Entity):
+class Platform(EntityDiff):
     def __init__(self, pos, *groups):
         super().__init__(Color("#DDDDDD"), pos, *groups)
 
